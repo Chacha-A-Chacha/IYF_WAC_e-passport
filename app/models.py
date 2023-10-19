@@ -1,6 +1,7 @@
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, UserMixin
+# from flask_login import LoginManager, UserMixin
+from datetime import datetime  # Import the datetime module
 import random
 import string
 import qrcode
@@ -24,6 +25,10 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)  # Added email field
     password = db.Column(db.String(120), nullable=False)
+    date_of_birth = db.Column(db.Date)
+    passport_photo_filename = db.Column(db.String(255))
+    nationality = db.Column(db.String(100))
+    phone_number = db.Column(db.String(20))
     role = db.Column(db.String(50), nullable=False)  # Role can be 'admin', 'teacher', 'student'
     courses = db.relationship('Course', backref='teacher', lazy=True)  # One-to-many relationship with courses
 
@@ -103,6 +108,10 @@ class Student(User):
 
         # Create an in-memory buffer to save QR code as bytes
         qr_img = qr.make_image(fill_color="black", back_color="white")
+
+        # Open the school logo image
+        # school_logo = Image.open(self.school_logo_path)
+
         buffer = BytesIO()
         qr_img.save(buffer)
         qr_image_bytes = buffer.getvalue()

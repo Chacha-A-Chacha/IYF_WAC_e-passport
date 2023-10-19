@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from flask_Mail import Mail, Message
 
 from config import config
 
@@ -10,6 +11,8 @@ db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
+mail = Mail()
+
 
 def create_app():
     app = Flask(__name__)

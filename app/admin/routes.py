@@ -48,10 +48,10 @@ def submit_excel():
 
 
 # Helper function to generate a student ID
-def generate_student_id(full_name):
-    # Generate student ID based on full name (customize as needed)
-    # Example: Extract first letters of first name and last name, and add random numbers
-    return ''.join(word[0].upper() for word in full_name.split()) + ''.join(str(random.randint(0, 9)) for _ in range(4))
+# def generate_student_id(full_name):
+#     # Generate student ID based on full name (customize as needed)
+#     # Example: Extract first letters of first name and last name, and add random numbers
+#     return ''.join(word[0].upper() for word in full_name.split()) + ''.join(str(random.randint(0, 9)) for _ in range(4))
 
 
 # Helper function to generate a temporary password
@@ -66,6 +66,7 @@ def send_registration_email(email, student_id, temp_password):
     msg = Message('Your Student ID and Temporary Password', sender='your-email@example.com', recipients=[email])
     msg.body = f'Your Student ID: {student_id}\nTemporary Password: {temp_password}\nPlease reset your password after login.'
     mail.send(msg)
+
 
 # Admin route to display registered students
 @admin_bp.route('/students')
