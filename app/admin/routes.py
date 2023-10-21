@@ -63,7 +63,8 @@ def generate_temp_password():
 
 # Helper function to send registration email
 def send_registration_email(email, student_id, temp_password):
-    msg = Message('Your Student ID and Temporary Password', sender='your-email@example.com', recipients=[email])
+    msg = Message('Your Student ID and Temporary Password',
+                  sender='your-email@example.com', recipients=[email])
     msg.body = f'Your Student ID: {student_id}\nTemporary Password: {temp_password}\nPlease reset your password after login.'
     mail.send(msg)
 

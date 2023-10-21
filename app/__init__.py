@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from flask_Mail import Mail, Message
+from flask_mail import Mail, Message
 
 from config import config
 
@@ -37,6 +37,3 @@ def create_app():
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     return app
-
-
-

@@ -5,7 +5,7 @@ from datetime import datetime  # Import the datetime module
 import random
 import string
 import qrcode
-from PIL import Image
+# from PIL import Image
 from io import BytesIO
 
 
