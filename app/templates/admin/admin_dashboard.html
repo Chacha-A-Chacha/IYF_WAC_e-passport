@@ -1,7 +1,19 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 
 {% block content %}
 
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Total Users: {{ admin_data.total_users }}</p>
+    <p>Total Orders: {{ admin_data.total_orders }}</p>
+    <p>New Requests: {{ admin_data.new_requests }}</p>
+</body>
 
 {% endblock %}

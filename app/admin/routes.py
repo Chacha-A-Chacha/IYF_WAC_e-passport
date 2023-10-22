@@ -1,4 +1,4 @@
-
+#!/src/bin/env python3
 from flask import Flask, request, render_template
 import pandas as pd
 from app import db  # Import db from the main __init__.py file
@@ -14,6 +14,21 @@ from . import admin_bp
 #     email = db.Column(db.String(120), unique=True, nullable=False)
 #     course = db.Column(db.String(80), nullable=False)
 #     password = db.Column(db.String(120), nullable=False)  # Hashed password stored in the database
+
+
+@admin_bp.route('/admin_dashboard')
+def admin_dashboard():
+    """
+
+    """
+    # Logic to fetch admin-related data from the database or other sources
+    admin_data = {
+        'total_users': 1000,
+        'total_orders': 500,
+        'new_requests': 10
+    }
+    # Render the admin dashboard template and pass the admin data to it
+    return render_template('admin/admin_dashboard.html', admin_data=admin_data)
 
 
 # Route to submit the Excel sheet and register students
@@ -41,7 +56,7 @@ def submit_excel():
             student = Student(full_name=full_name, email=email, course=course,
                               password=temp_password)
             db.session.add(student)
-        db.session.commit()
+            db.session.commit()
         return "Students registered successfully!"
 
     return "Error processing file"
