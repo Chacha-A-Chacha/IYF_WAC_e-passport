@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./templates/**/*.html",
-    "./static/src/**/*.js"
+    "./app/templates/**/*.{html, js}",  // Path to your Flask templates
   ],
   theme: {
     extend: {},
@@ -10,3 +9,4 @@ module.exports = {
   plugins: [],
 }
 
+// npx tailwindcss -i ./app/static/src/input.css -o ./app/static/dist/css/output.css --watch
