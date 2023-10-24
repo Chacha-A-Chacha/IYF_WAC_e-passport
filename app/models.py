@@ -1,6 +1,5 @@
-
-from werkzeug.security import generate_password_hash, check_password_hash
-# from flask_login import LoginManager, UserMixin
+#!/usr/bin/env python3
+# from flask_login import  UserMixin
 from datetime import datetime  # Import the datetime module
 import random
 import string
