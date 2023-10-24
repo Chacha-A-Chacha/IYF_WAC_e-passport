@@ -19,6 +19,26 @@ def load_user(user_id):
 
 
 class User(db.Model):
+    """
+        Represents a user in the system.
+
+        Attributes:
+            id (int): The unique identifier of the user.
+            username (str): The username of the user.
+            email (str): The email address of the user.
+            password (str): The hashed password of the user.
+            date_of_birth (date): The date of birth of the user.
+            passport_photo_filename (str): The filename of the user's passport photo.
+            nationality (str): The nationality of the user.
+            phone_number (str): The phone number of the user.
+            role (str): The role of the user ('admin', 'teacher', or 'student').
+
+        Relationships:
+            class_enrollment (Class): Many-to-one relationship with the Class table representing the class the student is enrolled in.
+            courses (Course): One-to-many relationship with the Course table representing the courses the user is associated with.
+            attendances (Attendance): One-to-many relationship with the Attendance table representing the attendances of the user.
+    """
+
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -46,6 +66,17 @@ class User(db.Model):
 
 
 class Course(db.Model):
+    """
+       Represents a course in the system.
+
+       Attributes:
+           id (int): The unique identifier of the course.
+           course_name (str): The name of the course.
+
+       Relationships:
+           teacher (User): One-to-one relationship with the User table representing the teacher of the course.
+           classes (Class): One-to-many relationship with the Class table representing the classes in the course.
+    """
     __tablename__ = 'courses'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +86,19 @@ class Course(db.Model):
 
 
 class Class(db.Model):
+    """
+        Represents a class in the system.
+
+        Attributes:
+            id (int): The unique identifier of the class.
+            class_name (str): The name of the class.
+
+        Relationships:
+            course (Course): Many-to-one relationship with the Course table representing the course the class belongs to.
+            teacher (User): One-to-one relationship with the User table representing the teacher of the class.
+            students (User): One-to-many relationship with the User table representing the students in the class.
+            attendances (Attendance): One-to-many relationship with the Attendance table representing the attendances of the class.
+    """
     __tablename__ = 'classes'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +109,62 @@ class Class(db.Model):
     attendances = db.relationship('Attendance', backref='class_attendance', lazy=True)  # One-to-many relationship with attendances
 
 
+class Teacher(User):
+    """
+    Represents a teacher in the system.
+
+    Attributes:
+        username (str): The username of the teacher.
+        email (str): The email address of the teacher.
+        password (str): The hashed password of the teacher.
+        class_id (int): The ID of the class the teacher is handling.
+        course_id (int): The ID of the course the teacher is teaching.
+
+    Relationships:
+        class_teacher (Class): One-to-one relationship with the Class table representing the class the teacher is handling.
+        course_teacher (Course): One-to-one relationship with the Course table representing the course the teacher is teaching.
+    """
+
+    __tablename__ = 'teachers'
+
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+
+    # Relationships with Class and Course tables
+    class_teacher = db.relationship('Class', backref='teacher', lazy=True)
+    course_teacher = db.relationship('Course', backref='teacher', lazy=True)
+
+    def __init__(self, username=None, email=None, password=None, class_id=None, course_id=None):
+        """
+        Initializes a new Teacher object.
+
+        Args:
+            username (str): The username of the teacher.
+            email (str): The email address of the teacher.
+            password (str): The hashed password of the teacher.
+            class_id (int): The ID of the class the teacher is handling.
+            course_id (int): The ID of the course the teacher is teaching.
+        """
+        super().__init__(username=username, email=email, password=password, role='teacher')
+        self.class_id = class_id
+        self.course_id = course_id
+
+
 class Attendance(db.Model):
+    """
+    Represents attendance records in the system.
+
+    Attributes:
+        id (int): The unique identifier of the attendance record.
+        student_id (int): The ID of the student associated with the attendance record.
+        class_id (int): The ID of the class associated with the attendance record.
+        attendance_date (datetime): The date and time of the attendance record.
+        is_present (bool): Indicates whether the student was present or absent.
+
+    Relationships:
+        class_attendance (Class): One-to-one relationship with the Class table representing the class associated with the attendance record.
+    """
     __tablename__ = 'attendances'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -76,6 +175,16 @@ class Attendance(db.Model):
 
 
 class Student(User):
+    """
+    Represents a student in the system.
+
+    Attributes:
+        student_id (str): The unique identifier of the student.
+        qr_code_image (bytes): Binary data representing the QR code image associated with the student.
+
+    Relationships:
+        attendances (Attendance): One-to-many relationship with the Attendance table representing the attendances of the student.
+    """
     __tablename__ = 'students'
 
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)

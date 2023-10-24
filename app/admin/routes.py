@@ -4,6 +4,7 @@ import pandas as pd
 from app import db  # Import db from the main __init__.py file
 from ..models import User, Student
 from . import admin_bp
+from .utils import generate_temp_password
 
 
 # Student model (example)
@@ -62,6 +63,51 @@ def submit_excel():
     return "Error processing file"
 
 
+@admin_bp.route('/admin/register-student', methods=['GET', 'POST'])
+def admin_register_student():
+    form = StudentRegistrationForm()
+    if form.validate_on_submit():
+        try:
+            full_name = form.full_name.data
+            email = form.email.data
+            password = generate_temp_password()  # Generate temporary password
+
+            # Register student
+            student = Student(full_name=full_name, email=email, password=password)
+            db.session.add(student)
+            db.session.commit()
+
+            return "Student registered successfully!"
+        except Exception as e:
+            print(str(e))  # Log the exception for debugging
+            db.session.rollback()  # Rollback changes if there's an error
+            return "Error registering student"
+
+    return render_template('admin/register_student.html', form=form)
+
+@admin_bp.route('/admin/register-teacher', methods=['GET', 'POST'])
+def admin_register_teacher():
+    form = TeacherRegistrationForm()
+    if form.validate_on_submit():
+        try:
+            full_name = form.full_name.data
+            email = form.email.data
+            password = generate_temp_password()  # Generate temporary password
+            subject = form.subject.data
+
+            # Register teacher
+            teacher = Teacher(full_name=full_name, email=email, password=password, subject=subject)
+            db.session.add(teacher)
+            db.session.commit()
+
+            return "Teacher registered successfully!"
+        except Exception as e:
+            print(str(e))  # Log the exception for debugging
+            db.session.rollback()  # Rollback changes if there's an error
+            return "Error registering teacher"
+
+    return render_template('admin/register_teacher.html', form=form)
+
 # Helper function to generate a student ID
 # def generate_student_id(full_name):
 #     # Generate student ID based on full name (customize as needed)
@@ -70,10 +116,10 @@ def submit_excel():
 
 
 # Helper function to generate a temporary password
-def generate_temp_password():
-    # Generate a random temporary password (customize as needed)
-    # Example: Generate a random string of length 8
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+# def generate_temp_password():
+#     # Generate a random temporary password (customize as needed)
+#     # Example: Generate a random string of length 8
+#     return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
 
 # Helper function to send registration email
