@@ -36,4 +36,7 @@ def create_app():
     from .admin import admin_bp as admin_blueprint
     app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
+    from .teacher import teacher_bp as teacher_blueprint
+    app.register_blueprint(teacher_blueprint, url_prefix='/teacher')
+
     return app
