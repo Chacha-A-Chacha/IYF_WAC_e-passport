@@ -1,6 +1,8 @@
 import string
 import secrets
-from flask_mail import Message
+from flask_mail import Message  # This class represents an email message.
+from flask import current_app  # Flask's way of referring to the current application context.
+
 from app import mail
 
 def generate_temp_password(length=12):
@@ -17,12 +19,9 @@ def generate_temp_password(length=12):
     temp_password = ''.join(secrets.choice(characters) for _ in range(length))
     return temp_password
 
-# Example usage
-# temp_password = generate_temp_password()
-# print(temp_password)
-
-
-
+    # Example usage
+    # temp_password = generate_temp_password()
+    # print(temp_password)
 
 
 def send_temp_password_email(email, temp_password):
@@ -44,13 +43,13 @@ def send_temp_password_email(email, temp_password):
     """
     try:
         # Create a message object
-        msg = Message('Temporary Password', sender='admin@example.com', recipients=[email])
+        msg = Message('Temporary Password', sender=current_app.config['MAIL_USERNAME'], recipients=[email])
 
         # Compose the email body
         msg.body = f'Your temporary password is: {temp_password}. Please reset your password after logging in.'
 
         # Send the email
-        mail.send(msg)
+        current_app.mail.send(msg)
 
         # Optionally, handle successful email sending (e.g., log the event)
         # logger.info(f'Temporary password email sent to {email}')

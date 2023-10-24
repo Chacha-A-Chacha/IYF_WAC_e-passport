@@ -55,6 +55,15 @@ class User(db.Model):
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=True)
 
     def __init__(self, username, email, password, role):
+        """
+        Initializes a new User object.
+
+        Args:
+            username (str): The username of the user.
+            email (str): The email address of the user.
+            password (str): The hashed password of the user.
+            role (str): The role of the user ('admin', 'teacher', or 'student').
+        """
         self.username = username
         self.email = email
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')  # Hashing the password
@@ -127,7 +136,7 @@ class Teacher(User):
     __tablename__ = 'teachers'
 
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
+    class_teacher_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
 
     # Relationships with Class and Course tables
@@ -191,6 +200,16 @@ class Student(User):
     qr_code_image = db.Column(db.LargeBinary, nullable=True)  # Binary field to store QR code image data
 
     def __init__(self, name=None, school_logo_path=None, username=None, password=None):
+        """
+        Initializes a new Teacher object.
+
+        Args:
+            username (str): The username of the teacher.
+            email (str): The email address of the teacher.
+            password (str): The hashed password of the teacher.
+            class_id (int): The ID of the class the teacher is handling.
+            course_id (int): The ID of the course the teacher is teaching.
+        """
         super().__init__(username=username, password=password, role='student')
         self.name = name
         self.student_id = self.generate_student_id()
@@ -198,12 +217,24 @@ class Student(User):
         self.generate_qr_code()
 
     def generate_student_id(self):
+        """
+        Generates a unique student ID consisting of letters and numbers.
+
+        Returns:
+           str: The generated 8-character student ID.
+        """
         # Generate a unique student ID consisting of letters and numbers
         characters = string.ascii_letters + string.digits
         student_id = ''.join(random.choice(characters) for _ in range(8))  # 8-character student ID
         return student_id
 
     def generate_qr_code(self):
+        """
+        Generates a QR code containing the student ID with the school logo in the center and saves it as bytes.
+
+        Returns:
+            bytes: Binary data representing the QR code image.
+        """
         # Generate QR code containing the student ID with the school logo in the center
         qr = qrcode.QRCode(
             version=1,
