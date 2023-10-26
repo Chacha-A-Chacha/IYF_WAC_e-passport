@@ -35,42 +35,47 @@
 
     <form action="{{ url_for('admin.admin_register_student') }}" method="POST">
         {{ student_form.hidden_tag() }}
-        <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
             <div>
                 <label class="text-gray-700 " for="username">Username</label>
-                {{ student_form.username(class="mt-1 py-2 px-3 focus:border-aqua-500 block
-                            w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter username") }}
-                <input id="username" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                            focus:border-blue-400  
-                         focus:outline-none ">
+                {{ student_form.username(id="username", type="text", class="block w-full px-4 py-2 my-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                focus:border-blue-400  
+             focus:outline-none ", placeholder="Enter username") }} 
             </div>
         
             <div>
-                <label class="text-gray-700 " for="emailAddress">Email Address</label>
-                <input id="emailAddress" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                            focus:border-blue-400  
-                         focus:outline-none ">
+                <label class="text-gray-700" for="email">Email Address</label>
+                {{ student_form.email(id="email", type="email", class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                focus:border-blue-400  
+             focus:outline-none ", placeholder="Enter Email Address") }}
             </div>
         
             <div>
                 <label class="text-gray-700 " for="password">Course</label>
-                <input id="password" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                            focus:border-blue-400  
-                         focus:outline-none ">
+                {{ student_form.course_name(id="course_name", type="text", class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                focus:border-blue-400  
+             focus:outline-none ", placeholder="Enter Course") }}
             </div>
         
             <div>
                 <label class="text-gray-700 " for="passwordConfirmation">Class
                 </label>
-                <input id="passwordConfirmation" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                            focus:border-blue-400  
-                         focus:outline-none ">
+                {{ student_form.class_name(id="class_name", type="text", class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                focus:border-blue-400  
+             focus:outline-none ", placeholder="Enter Class") }}
             </div>
         </div>
-
+        <div class="mt-4 flex justify-end">
+            <button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 
+                    transform bg-indigo-600 border rounded-lg hover:bg-indigo-200" type="submit">
+                Submit Excel
+            </button>
+        </div>
         <div class="flex justify-end mt-6">
-            <button
-                class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
+            <button type="submit" class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 
+                rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+                Save
+            </button>
         </div>
     </form>
 </section>

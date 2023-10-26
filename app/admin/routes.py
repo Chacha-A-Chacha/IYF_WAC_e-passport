@@ -88,6 +88,8 @@ def admin_register_student():
             email = form.email.data
             password = generate_temp_password()
             class_name = form.class_name.data
+            course_name = form.course_name.data
+            # role = Role.query.filter_by(role='Student').first()
             # additional_info = form.additional_info.data
 
             # Register student
@@ -100,7 +102,9 @@ def admin_register_student():
             # Handle class relationship
             # Assuming Class model has appropriate relationships defined
             class_obj = Class.query.filter_by(class_name=class_name).first()
+            course_obj = Course.query.filter_by(course_name=course_name).first()
             student.class_enrollment = class_obj
+            student.course_enrollment = course_obj
             db.session.commit()
 
             # Send temporary password email

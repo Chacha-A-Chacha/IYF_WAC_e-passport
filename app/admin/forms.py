@@ -16,5 +16,6 @@ class StudentRegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     class_name = StringField('Class Name', validators=[DataRequired()])
+    course_name = StringField('Course Name', validators=[DataRequired()])
     additional_info = StringField('Additional Information')  # Add more fields if needed
     submit = SubmitField('Register Student')
