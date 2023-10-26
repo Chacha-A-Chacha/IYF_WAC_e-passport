@@ -6,16 +6,20 @@
 
 
 <section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md">
+    <div class=""> 
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Bulk Student Registration</h3>
+        <p class="mt-1 text-sm text-gray-500">Upload an Excel Sheet with columns: Full Name, Email, Course</p>
+    </div>
     <!-- Form for Submitting Excel File -->
     <form action="{{ url_for('admin.submit_excel') }}" method="post" enctype="multipart/form-data">
-        <label for="image" class="block text-sm text-gray-500 dark:text-gray-300">Submit Excel File</label>
+        <label for="image" class="block mt-2 text-sm text-gray-700">Submit Excel File</label>
     
         <input type="file" name="file" accept=".xlsx, .xls" class="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg 
                 file:bg-gray-200 file:text-gray-700 file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full 
                 placeholder-gray-400/70  focus:border-blue-400 focus:outline-none " />
-        <div class="mt-4 flex items-center justify-end gap-6">
+        <div class="mt-4 flex justify-end">
             <button class="px-6 py-2 font-medium tracking-wide text-white capitalize transition-colors duration-300 
-                    transform bg-indigo-600 border rounded-lg hover:bg-indigo-400" type="submit">
+                    transform bg-indigo-600 border rounded-lg hover:bg-indigo-200" type="submit">
                 Submit Excel
             </button>
         </div>
@@ -23,6 +27,53 @@
     </form>
 </section>
 
+<section class="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md">
+    <div class="">
+        <h3 class="text-lg font-medium leading-6 text-gray-900">Single Stundent Registation</h3>
+        <p class="mt-1 text-sm text-gray-500">Enter student details below.</p>
+    </div>
+
+    <form action="{{ url_for('admin.admin_register_student') }}" method="POST">
+        {{ student_form.hidden_tag() }}
+        <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
+            <div>
+                <label class="text-gray-700 " for="username">Username</label>
+                {{ student_form.username(class="mt-1 py-2 px-3 focus:border-aqua-500 block
+                            w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter username") }}
+                <input id="username" type="text" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                            focus:border-blue-400  
+                         focus:outline-none ">
+            </div>
+        
+            <div>
+                <label class="text-gray-700 " for="emailAddress">Email Address</label>
+                <input id="emailAddress" type="email" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                            focus:border-blue-400  
+                         focus:outline-none ">
+            </div>
+        
+            <div>
+                <label class="text-gray-700 " for="password">Course</label>
+                <input id="password" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                            focus:border-blue-400  
+                         focus:outline-none ">
+            </div>
+        
+            <div>
+                <label class="text-gray-700 " for="passwordConfirmation">Class
+                </label>
+                <input id="passwordConfirmation" type="password" class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
+                            focus:border-blue-400  
+                         focus:outline-none ">
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+            <button
+                class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Save</button>
+        </div>
+    </form>
+</section>
 
 <div class=" md:space-y-6">
     <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
@@ -42,12 +93,12 @@
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            {{ student_form.email(class="mt-1 py-2 px-3 focus:ring-aqua-500 focus:border-aqua-500 block
+                            {{ student_form.email(class="mt-1 py-2 px-3 -aqua-500 focus:border-aqua-500 block
                             w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter email") }}
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            {{ student_form.password(class="mt-1 py-2 px-3 focus:ring-aqua-500 focus:border-aqua-500
+                            {{ student_form.password(class="mt-1 py-2 px-3 -aqua-500 focus:border-aqua-500
                             block
                             w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter password") }}
                         </div>
@@ -55,7 +106,7 @@
                     </div>
                     <div class="mt-4">
                         <button type="submit"
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-aqua-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-aqua-700 focus:outline-none -2 -offset-2 -aqua-500">
                             Register
                         </button>
                     </div>
@@ -80,19 +131,19 @@
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                            {{ teacher_form.email(class="mt-1 p-2 focus:ring-aqua-500 focus:border-aqua-500 block
+                            {{ teacher_form.email(class="mt-1 p-2 -aqua-500 focus:border-aqua-500 block
                             w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter email") }}
                         </div>
                         <div class="col-span-6 sm:col-span-3">
                             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                            {{ teacher_form.password(class="mt-1 p-2 focus:ring-aqua-500 focus:border-aqua-500 block
+                            {{ teacher_form.password(class="mt-1 p-2 -aqua-500 focus:border-aqua-500 block
                             w-full shadow-sm border border-gray-300 rounded-md", placeholder="Enter password") }}
                         </div>
                         <!-- Add more form fields as needed -->
                     </div>
                     <div class="mt-4 items-center justify-end gap-x-6">
                         <button type="submit"
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none -2 -offset-2 -aqua-500">
                             Register
                         </button>
                     </div>
@@ -117,19 +168,19 @@
                     </div>
                     <div class="flex-1">
                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                        {{ teacher_form.email(class="mt-1 p-2 focus:ring-aqua-500 focus:border-aqua-500 block w-full
+                        {{ teacher_form.email(class="mt-1 p-2 -aqua-500 focus:border-aqua-500 block w-full
                         shadow-sm border border-gray-300 rounded-md", placeholder="Enter email") }}
                     </div>
                     <div class="flex-1">
                         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                        {{ teacher_form.password(class="mt-1 p-2 focus:ring-aqua-500 focus:border-aqua-500 block w-full
+                        {{ teacher_form.password(class="mt-1 p-2 -aqua-500 focus:border-aqua-500 block w-full
                         shadow-sm border border-gray-300 rounded-md", placeholder="Enter password") }}
                     </div>
                     <!-- Add more form fields as needed -->
                 </div>
                 <div class="mt-4 flex items-center justify-end gap-6">
                     <button type="submit"
-                        class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">
+                        class="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none -2 -offset-2 -aqua-500">
                         Register
                     </button>
                 </div>
@@ -146,28 +197,28 @@
         <form>
             <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="username">Username</label>
+                    <label class="text-gray-700 " for="username">Username</label>
                     <input id="username" type="text"
-                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 focus:border-blue-400  focus:outline-none ">
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Email Address</label>
+                    <label class="text-gray-700 " for="emailAddress">Email Address</label>
                     <input id="emailAddress" type="email"
-                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 focus:border-blue-400  focus:outline-none ">
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="password">Password</label>
+                    <label class="text-gray-700 " for="password">Password</label>
                     <input id="password" type="password"
-                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 focus:border-blue-400  focus:outline-none ">
                 </div>
 
                 <div>
-                    <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Password
+                    <label class="text-gray-700 " for="passwordConfirmation">Password
                         Confirmation</label>
                     <input id="passwordConfirmation" type="password"
-                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 focus:border-blue-400  focus:outline-none ">
                 </div>
             </div>
 
@@ -205,7 +256,7 @@
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
                                             http:// </span>
                                         <input type="text" name="company-website" id="company-website"
-                                            class="focus:ring-aqua-500 focus:border-aqua-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
+                                            class="-aqua-500 focus:border-aqua-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
                                             placeholder="www.example.com">
                                     </div>
                                 </div>
@@ -215,7 +266,7 @@
                                 <label for="about" class="block text-sm font-medium text-gray-700"> About </label>
                                 <div class="mt-1">
                                     <textarea id="about" name="about" rows="3"
-                                        class="shadow-sm focus:ring-aqua-500 focus:border-aqua-500 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                        class="shadow-sm -aqua-500 focus:border-aqua-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                                         placeholder="you@example.com"></textarea>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500">Brief description for your profile. URLs are
@@ -234,7 +285,7 @@
                                         </svg>
                                     </span>
                                     <button type="button"
-                                        class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">Change</button>
+                                        class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none -2 -offset-2 -aqua-500">Change</button>
                                 </div>
                             </div>
 
@@ -279,27 +330,27 @@
                                     <label for="first-name" class="block text-sm font-medium text-gray-700">First
                                         name</label>
                                     <input type="text" name="first-name" id="first-name" autocomplete="given-name"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="last-name" class="block text-sm font-medium text-gray-700">Last
                                         name</label>
                                     <input type="text" name="last-name" id="last-name" autocomplete="family-name"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-4">
                                     <label for="email-address" class="block text-sm font-medium text-gray-700">Email
                                         address</label>
                                     <input type="text" name="email-address" id="email-address" autocomplete="email"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3">
                                     <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
                                     <select id="country" name="country" autocomplete="country-name"
-                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-aqua-500 focus:border-aqua-500 sm:text-sm">
+                                        class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none -aqua-500 focus:border-aqua-500 sm:text-sm">
                                         <option>United States</option>
                                         <option>Canada</option>
                                         <option>Mexico</option>
@@ -311,20 +362,20 @@
                                         address</label>
                                     <input type="text" name="street-address" id="street-address"
                                         autocomplete="street-address"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                                     <label for="city" class="block text-sm font-medium text-gray-700">City</label>
                                     <input type="text" name="city" id="city" autocomplete="address-level2"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                                     <label for="region" class="block text-sm font-medium text-gray-700">State /
                                         Province</label>
                                     <input type="text" name="region" id="region" autocomplete="address-level1"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
 
                                 <div class="col-span-6 sm:col-span-3 lg:col-span-2">
@@ -332,7 +383,7 @@
                                         Postal
                                         code</label>
                                     <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code"
-                                        class="mt-1 focus:ring-aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        class="mt-1 -aqua-500 focus:border-aqua-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                 </div>
                             </div>
                         </form>
@@ -355,7 +406,7 @@
                                     <div class="flex items-start">
                                         <div class="h-5 flex items-center">
                                             <input id="comments" name="comments" type="checkbox"
-                                                class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
+                                                class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="comments" class="font-medium text-gray-700">Comments</label>
@@ -367,7 +418,7 @@
                                     <div class="flex items-start">
                                         <div class="flex items-center h-5">
                                             <input id="candidates" name="candidates" type="checkbox"
-                                                class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
+                                                class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="candidates" class="font-medium text-gray-700">Candidates</label>
@@ -378,7 +429,7 @@
                                     <div class="flex items-start">
                                         <div class="flex items-center h-5">
                                             <input id="offers" name="offers" type="checkbox"
-                                                class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
+                                                class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="offers" class="font-medium text-gray-700">Offers</label>
@@ -398,14 +449,14 @@
                                 <div class="mt-4 space-y-4">
                                     <div class="flex items-center">
                                         <input id="push-everything" name="push-notifications" type="radio"
-                                            class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
+                                            class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
                                         <label for="push-everything"
                                             class="ml-3 block text-sm font-medium text-gray-700">
                                             Everything </label>
                                     </div>
                                     <div class="flex items-center">
                                         <input id="push-email" name="push-notifications" type="radio"
-                                            class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
+                                            class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
                                         <label for="push-email" class="ml-3 block text-sm font-medium text-gray-700">
                                             Same
                                             as
@@ -413,7 +464,7 @@
                                     </div>
                                     <div class="flex items-center">
                                         <input id="push-nothing" name="push-notifications" type="radio"
-                                            class="focus:ring-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
+                                            class="-aqua-500 h-4 w-4 text-aqua-600 border-gray-300">
                                         <label for="push-nothing" class="ml-3 block text-sm font-medium text-gray-700">
                                             No
                                             push
@@ -428,9 +479,9 @@
 
             <div class="flex justify-end">
                 <button type="button"
-                    class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">Cancel</button>
+                    class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none -2 -offset-2 -aqua-500">Cancel</button>
                 <button type="submit"
-                    class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-aqua-500">Save</button>
+                    class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-aqua-600 hover:bg-aqua-700 focus:outline-none -2 -offset-2 -aqua-500">Save</button>
             </div>
         </div>
     </div>
