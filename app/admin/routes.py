@@ -23,7 +23,7 @@ def admin_dashboard():
 
 
 # Route to submit the Excel sheet and register students
-@admin_bp.route('/submit-excel', methods=['POST'])
+@admin_bp.route('/submit-excel', methods=['GET', 'POST'])
 def submit_excel():
     """
     Handle the submission of an Excel file containing student data, process the data, and register students.
@@ -61,7 +61,7 @@ def submit_excel():
                 send_temp_password_email(email, student.student_id, temp_password)
 
             flash('Students registered successfully!', 'success')
-            return redirect(url_for('admin_bp.admin_dashboard'))
+            return redirect(url_for('admin.admin_dashboard'))
     except Exception as e:
         print(str(e))  # Log the exception for debugging
         db.session.rollback()  # Rollback changes if there's an error
@@ -70,7 +70,7 @@ def submit_excel():
     return redirect(request.url)
 
 
-@admin_bp.route('/admin/register-student', methods=['GET', 'POST'])
+@admin_bp.route('/register-student', methods=['GET', 'POST'])
 def admin_register_student():
     """
     Handle the registration of a new student by the admin.
@@ -113,10 +113,10 @@ def admin_register_student():
             db.session.rollback()  # Rollback changes if there's an error
             flash('Error registering student. Please try again.', 'error')
 
-    return render_template('admin/register_student.html', form=form)
+    return redirect(url_for('admin.register'))
 
 
-@admin_bp.route('/admin/register-teacher', methods=['GET', 'POST'])
+@admin_bp.route('/register-teacher', methods=['GET', 'POST'])
 def admin_register_teacher():
     """
     Handle the registration of a new teacher by the admin.
@@ -152,13 +152,13 @@ def admin_register_teacher():
             send_temp_password_email(email, teacher.teacher_id, password)
 
             flash('Teacher registered successfully!', 'success')
-            return redirect(url_for('admin_bp.admin_dashboard'))
+            return redirect(url_for('admin.admin_dashboard'))
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
             flash('Error registering teacher. Please try again.', 'error')
 
-    return render_template('admin/register_teacher.html', form=form)
+    return redirect(url_for('admin.register'))
 
 
 # Helper function to generate a student ID
@@ -183,9 +183,25 @@ def admin_register_teacher():
 #     mail.send(msg)
 
 
+@admin_bp.route('/register')
+def register():
+    student_form = StudentRegistrationForm()
+    teacher_form = TeacherRegistrationForm()
+    # Retrieve registered students from the database (modify this query based on your actual model)
+    # students = Student.query.all()
+    return render_template('admin/register.html', teacher_form=teacher_form, student_form=student_form)
+
+
 # Admin route to display registered students
 @admin_bp.route('/students')
 def admin_students():
     # Retrieve registered students from the database (modify this query based on your actual model)
     students = Student.query.all()
     return render_template('students.html', students=students)
+
+#
+# @admin_bp.route('/teachers')
+# def admin_teachers():
+#     # Retrieve registered students from the database (modify this query based on your actual model)
+#     teachers = Teacher.query.all()
+#     return render_template('teachers.html', teachers=teachers)
