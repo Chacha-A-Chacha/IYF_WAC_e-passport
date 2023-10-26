@@ -34,12 +34,12 @@ def submit_excel():
     """
     if 'file' not in request.files:
         flash('No file part', 'error')
-        return redirect(request.url)
+        return redirect(url_for('admin.register'))
 
     file = request.files['file']
     if file.filename == '':
         flash('No selected file', 'error')
-        return redirect(request.url)
+        return redirect(url_for('admin.register'))
 
     try:
         if file:
@@ -61,13 +61,13 @@ def submit_excel():
                 send_temp_password_email(email, student.student_id, temp_password)
 
             flash('Students registered successfully!', 'success')
-            return redirect(url_for('admin.admin_dashboard'))
+            return redirect(url_for('admin.register'))
     except Exception as e:
         print(str(e))  # Log the exception for debugging
         db.session.rollback()  # Rollback changes if there's an error
         flash('Error processing file. Please try again.', 'error')
 
-    return redirect(request.url)
+    return redirect(url_for('admin.register'))
 
 
 @admin_bp.route('/register-student', methods=['GET', 'POST'])

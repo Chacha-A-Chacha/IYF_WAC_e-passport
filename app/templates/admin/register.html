@@ -2,15 +2,6 @@
 
 {% block heading%}Registration Panel{% endblock %}
 
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
 
 {% block content %}
 <div class="space-y-6">

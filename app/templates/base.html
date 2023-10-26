@@ -348,6 +348,15 @@
                         <h1 class="text-2xl font-semibold text-gray-900">{% block heading%}Dashboard{% endblock %}</h1>
                     </div>
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                            <li class="flash-message" data-dismissible>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        {% endwith %}
                         <!-- Replace with your content -->
                         <div class="py-4">
                             <div class="">
@@ -360,6 +369,20 @@
             </main>
         </div>
 
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var flashMessages = document.querySelectorAll('.flash-message[data-dismissible]');
+
+                flashMessages.forEach(function (message) {
+                    setTimeout(function () {
+                        message.style.display = 'none';
+                    }, 5000); // Messages will disappear after 5 seconds (adjust the duration as needed)
+                });
+            });
+        </script>
 
 </body>
 
