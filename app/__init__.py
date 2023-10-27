@@ -47,8 +47,8 @@ def create_app(env='development'):
     login_manager.login_view = 'auth.login'  # Specify the login view for authentication
 
     # Register blueprints
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .student import student_bp as student_blueprint
+    app.register_blueprint(student_blueprint)
 
     from .auth import auth_bp as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')

@@ -1,19 +1,21 @@
 #!/src/bin/env python3
 from flask import Flask, request, render_template, flash, redirect, url_for
+from flask_login import login_required
 from .forms import ProfileForm
 from ..models import db, Teacher, Student, Class, Course
-from . import main
+from . import student_bp
 # from .utils import generate_temp_password, send_temp_password_email
 
 
-@main.route("/")
+@student_bp.route("/")
+@login_required
 def main():
 
 
     return render_template("student_dashboard.html")
 
 
-@main.route('/dashboard/<int:student_id>', methods=['GET'])
+@student_bp.route('/dashboard/<int:student_id>', methods=['GET'])
 def student_dashboard(student_id):
     # Fetch student information including QR code data and profile photo
     student = Student.query.get(student_id)
@@ -23,7 +25,7 @@ def student_dashboard(student_id):
     # Pass student information to the template
     return render_template('students/dashboard.html', student=student)
 
-@main.route("/")
+@student_bp.route("/")
 def dashboard():
     # Get the student ID from the session (replace 'student_id' with the actual key you use in the session)
     student_id = session.get('student_id')
@@ -50,7 +52,7 @@ def dashboard():
 
 # Add more routes and functionality as needed
 
-@main.route("/")
+@student_bp.route("/")
 def profile():
 
     """
@@ -60,7 +62,7 @@ def profile():
 
     pass
 
-@main.route("/")
+@student_bp.route("/")
 def edit_profile():
 
     pass
