@@ -205,16 +205,18 @@ class Student(User):
 
     Relationships:
         attendances (Attendance): One-to-many relationship with the Attendance table representing the attendances of the student.
+        class_ (Class): Many-to-one relationship with the Class table representing the class the student is enrolled in.
+
     """
     __tablename__ = 'students'
 
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     student_id = db.Column(db.String(20), unique=True, nullable=False)
     qr_code_image = db.Column(db.LargeBinary, nullable=True)  # Binary field to store QR code image data
-    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=True)
+    student_class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=True)
 
-     # Define the relationship with the Class model
-    class_ = db.relationship('Class', foreign_keys=[class_id])
+    # Define the relationship with the Class model
+    class_ = db.relationship('Class', foreign_keys=[student_class_id])
     
 
     def __init__(self, name=None, school_logo_path=None, username=None, password=None):

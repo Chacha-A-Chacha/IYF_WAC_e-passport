@@ -34,7 +34,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
 
         if user and user.check_password(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
@@ -42,13 +42,13 @@ def login():
 
             # Redirect users based on their roles
             if user.role == 'admin':
-                return redirect(url_for('admin.dashboard'))
+                return redirect(url_for('admin.admin_dashboard'))
             elif user.role == 'teacher':
                 return redirect(url_for('teacher.dashboard'))
             elif user.role == 'student':
                 return redirect(url_for('student.dashboard'))
             else:
-                return redirect(url_for('main.index'))  # Redirect to a default dashboard if role is undefined
+                return redirect(url_for('admin.admin_dashboard'))  # Redirect to a default dashboard if role is undefined
 
         else:
             flash('Invalid username or password', 'error')
