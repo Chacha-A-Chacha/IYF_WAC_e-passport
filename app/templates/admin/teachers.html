@@ -1,28 +1,28 @@
-<!-- students.html -->
+<!-- teachers.html -->
 {% extends "base.html" %}
 
-{% block heading%}Registered Students{% endblock %}
+{% block heading%}Registered Teachers{% endblock %}
 
 {% block content %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registered Students</title>
+    <title>Registered Teachers</title>
 </head>
 <body>
 
     <table>
         <tr>
-            <th>Student ID</th>
+            <th>Teacher ID</th>
             <th>Full Name</th>
             <th>Email</th>
-            <!-- Add more columns for other student attributes if needed -->
+            <!-- Add more columns for other teacher attributes if needed -->
         </tr>
-        {% for student in students %}
+        {% for teacher in teachers %}
             <tr>
-                <td>{{ student.student_id }}</td>
-                <td>{{ student.name }}</td>
-                <td>{{ student.email }}</td>
+                <td>{{ teacher.teacher_id }}</td>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.email }}</td>
                 <!-- Add more columns' data if needed -->
             </tr>
         {% endfor %}

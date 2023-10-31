@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 3cc4db72d171
+Revision ID: c60963f18149
 Revises: 
-Create Date: 2023-10-26 11:04:49.060836
+Create Date: 2023-10-31 04:11:36.610710
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3cc4db72d171'
+revision = 'c60963f18149'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,7 +23,9 @@ def upgrade():
     sa.Column('class_name', sa.String(length=80), nullable=False),
     sa.Column('course_id', sa.Integer(), nullable=False),
     sa.Column('teacher_id', sa.Integer(), nullable=False),
+    sa.Column('student_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['course_id'], ['courses.id'], ),
+    sa.ForeignKeyConstraint(['student_id'], ['users.id'], ),
     sa.ForeignKeyConstraint(['teacher_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('class_name')
@@ -66,6 +68,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.String(length=20), nullable=False),
     sa.Column('qr_code_image', sa.LargeBinary(), nullable=True),
+    sa.Column('class_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['class_id'], ['classes.id'], ),
     sa.ForeignKeyConstraint(['id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('student_id')

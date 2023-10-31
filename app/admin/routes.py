@@ -196,16 +196,13 @@ def register():
     return render_template('admin/register.html', teacher_form=teacher_form, student_form=student_form)
 
 
-# Admin route to display registered students
-@admin_bp.route('/students')
-def admin_students():
-    # Retrieve registered students from the database (modify this query based on your actual model)
-    students = Student.query.all()
-    return render_template('students.html', students=students)
 
-#
-# @admin_bp.route('/teachers')
-# def admin_teachers():
-#     # Retrieve registered students from the database (modify this query based on your actual model)
-#     teachers = Teacher.query.all()
-#     return render_template('teachers.html', teachers=teachers)
+@admin_bp.route('/teachers', methods=['GET'])
+def display_teachers():
+    teachers = Teacher.query.all()  # Query all teachers from the database
+    return render_template('admin/teachers.html', teachers=teachers)
+
+@admin_bp.route('/students', methods=['GET'])
+def display_students():
+    students = Student.query.all()  # Query all students from the database
+    return render_template('admin/students.html', students=students)
