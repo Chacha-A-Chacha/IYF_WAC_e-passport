@@ -143,12 +143,17 @@ class Teacher(User):
     __tablename__ = 'teachers'
 
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+
+    # Specify the foreign key columns for the class_teacher relationship
     class_teacher_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
+
+    # Specify the foreign key columns for the course_teacher relationship
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
 
-    # Relationships with Class and Course tables
-    class_teacher = db.relationship('Class', backref='teacher', lazy=True)
-    course_teacher = db.relationship('Course', backref='teacher', lazy=True)
+    # Define the relationships with Class and Course models using the foreign_keys argument
+    class_teacher = db.relationship('Class', foreign_keys=[class_teacher_id], backref='teachers_in_class', lazy=True)
+    course_teacher = db.relationship('Course', foreign_keys=[course_id], backref='teachers_in_course', lazy=True)
+    
 
     def __init__(self, username=None, email=None, password=None, class_id=None, course_id=None):
         """
