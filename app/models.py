@@ -121,7 +121,7 @@ class Class(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     # Define the relationships with User model using the foreign_keys argument
-    teacher = db.relationship('User', foreign_keys=[teacher_id], backref='class_teacher', lazy=True)
+    teacher = db.relationship('User', foreign_keys=[teacher_id], backref='class_taught', lazy=True)
     students = db.relationship('User', foreign_keys=[student_id], backref='class_enrollment', lazy=True)
 
 class Teacher(User):
