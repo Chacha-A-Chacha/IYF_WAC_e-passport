@@ -111,7 +111,7 @@ def admin_register_student():
             send_temp_password_email(email, student.student_id, password)
 
             flash('Student registered successfully!', 'success')
-            return redirect(url_for('admin_bp.admin_dashboard'))
+            
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
@@ -139,6 +139,10 @@ def admin_register_teacher():
             class_name = form.class_name.data
             course_name = form.course_name.data
 
+            print("Form Data - Username:", form.username.data, "Email:", form.email.data)
+            print(form.validate_on_submit())  # Check if the form is validating correctly
+            print(form.errors)  # Print form validation errors  
+
             # Register teacher
             teacher = Teacher(username=username, email=email, password=password, role='teacher')
             db.session.add(teacher)
@@ -156,7 +160,7 @@ def admin_register_teacher():
             send_temp_password_email(email, teacher.teacher_id, password)
 
             flash('Teacher registered successfully!', 'success')
-            return redirect(url_for('admin.admin_dashboard'))
+            
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
