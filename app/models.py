@@ -112,10 +112,17 @@ class Class(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     class_name = db.Column(db.String(80), unique=True, nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    students = db.relationship('User', backref='class_enrollment', lazy=True)  # One-to-many relationship with students
     attendances = db.relationship('Attendance', backref='class_attendance', lazy=True)  # One-to-many relationship with attendances
 
+    # Specify the foreign key columns for the teacher relationship
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # Specify the foreign key columns for the students relationship
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+
+    # Define the relationships with User model using the foreign_keys argument
+    teacher = db.relationship('User', foreign_keys=[teacher_id], backref='class_teacher', lazy=True)
+    students = db.relationship('User', foreign_keys=[student_id], backref='class_enrollment', lazy=True)
 
 class Teacher(User):
     """
@@ -198,6 +205,10 @@ class Student(User):
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     student_id = db.Column(db.String(20), unique=True, nullable=False)
     qr_code_image = db.Column(db.LargeBinary, nullable=True)  # Binary field to store QR code image data
+    class_id = db.Column(db.Integer, db.ForeignKey('classes.id'))
+
+     # Define the relationship with the Class model
+    class_ = db.relationship('Class', foreign_keys=[class_id])
 
     def __init__(self, name=None, school_logo_path=None, username=None, password=None):
         """
