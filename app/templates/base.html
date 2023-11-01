@@ -371,7 +371,7 @@
 
 
 
-
+        {% block scripts %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var flashMessages = document.querySelectorAll('.flash-message[data-dismissible]');
@@ -382,7 +382,9 @@
                     }, 5000); // Messages will disappear after 5 seconds (adjust the duration as needed)
                 });
             });
+            
         </script>
+        {% endblock %}
 
 </body>
 

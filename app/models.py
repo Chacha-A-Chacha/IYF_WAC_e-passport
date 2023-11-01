@@ -219,7 +219,7 @@ class Student(User):
     class_ = db.relationship('Class', foreign_keys=[student_class_id])
     
 
-    def __init__(self, name=None, school_logo_path=None, username=None, password=None):
+    def __init__(self, name=None, email=None, school_logo_path=None, username=None, password=None):
         """
         Initializes a new Teacher object.
 
@@ -230,8 +230,9 @@ class Student(User):
             class_id (int): The ID of the class the teacher is handling.
             course_id (int): The ID of the course the teacher is teaching.
         """
-        super().__init__(username=username, password=password, role='student')
+        super().__init__(username=username, email=email, password=password, role='student')
         self.name = name
+        
         self.student_id = self.generate_student_id()
         self.school_logo_path = school_logo_path
         self.generate_qr_code()

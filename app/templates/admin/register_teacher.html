@@ -11,37 +11,48 @@
             <h3 class="text-lg font-medium leading-6 text-gray-900">Teacher Registration</h3>
             <p class="mt-1 text-sm text-gray-500">Enter teacher details below.</p>
         </div>
-    
+
         <form action="{{ url_for('admin.admin_register_teacher') }}" method="POST">
             {{ form.hidden_tag() }}
             <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
                 <div>
                     <label class="text-gray-700 " for="username">Username</label>
-                    {{ form.username(id="username", type="text", class="block w-full max-w-sm px-4 py-2 my-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                    focus:border-blue-400  
-                 focus:outline-none ", placeholder="Enter username") }} 
+                    {{ form.username(id="username", type="text", class="block w-full max-w-sm px-4 py-2 my-2
+                    text-gray-700 bg-white border border-gray-200 rounded-md
+                    focus:border-blue-400
+                    focus:outline-none ", placeholder="Enter username") }}
                 </div>
-            
+
                 <div>
                     <label class="text-gray-700" for="email">Email Address</label>
-                    {{ form.email(id="email", type="email", class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                    focus:border-blue-400  
-                 focus:outline-none ", placeholder="Enter Email Address") }}
+                    {{ form.email(id="email", type="email", class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700
+                    bg-white border border-gray-200 rounded-md
+                    focus:border-blue-400
+                    focus:outline-none ", placeholder="Enter Email Address") }}
                 </div>
-            
+
                 <div>
-                    <label class="text-gray-700 " for="password">Course</label>
-                    {{ form.course_name(id="course_name", type="text", class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                    focus:border-blue-400  
-                 focus:outline-none ", placeholder="Enter Course") }}
+                    <label class="text-gray-700 " for="course-dropdown">Select Course</label>
+                    <select name="course" id="course-dropdown" type="text" 
+                        class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none">
+                        <option value="">Select Course</option>
+                        {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+
                 </div>
-            
+
                 <div>
-                    <label class="text-gray-700 " for="passwordConfirmation">Class
-                    </label>
-                    {{ form.class_name(id="class_name", type="text", class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md 
-                    focus:border-blue-400  
-                 focus:outline-none ", placeholder="Enter Class") }}
+                    <label class="text-gray-700 " for="class-dropdown">Select Class</label>
+                    <select name="class" id="class-dropdown" type="text"
+                        class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none">
+                        <option value="">Select Class</option>
+                        {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.class_name }}</option>
+                        {% endfor %}
+                    </select>
+
                 </div>
             </div>
             {% if form.errors %}
@@ -63,4 +74,31 @@
     </section>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+    // JavaScript to handle dynamic dropdowns
+    const courseDropdown = document.getElementById('course-dropdown');
+    const classDropdown = document.getElementById('class-dropdown');
+
+    courseDropdown.addEventListener('change', () => {
+        const selectedCourseId = courseDropdown.value;
+        fetch(`/get_classes/${selectedCourseId}`)
+            .then(response => response.json())
+            .then(data => {
+                // Clear existing options
+                classDropdown.innerHTML = '<option value="">Select Class</option>';
+                // Add new options based on selected course
+                data.classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.id;
+                    option.textContent = cls.class_name;
+                    classDropdown.appendChild(option);
+                });
+            });
+    });
+</script>
 {% endblock %}

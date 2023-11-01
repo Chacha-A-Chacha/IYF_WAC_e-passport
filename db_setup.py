@@ -6,9 +6,9 @@
 
 @Last modified  :  2021/9/  $$$$4:36
 """
-
+import app
 from app import db
-from .models import Class, Course
+from app.models import Class, Course
 
 # import torch
 # from sklearn import metrics
@@ -113,24 +113,30 @@ courses_data = [
     }
 ]
 
-# Initialize courses and classes in the database
-for course_info in courses_data:
-    course_name = course_info["course_name"]
-    class_names = course_info["class_names"]
-    
-    # Create the course
-    course = Course(course_name=course_name)
-    db.session.add(course)
-    db.session.commit()  # Commit course to get the course ID
-    
-    # Create classes for the course
-    for class_name in class_names:
-        class_obj = Class(class_name=class_name, course=course)
-        db.session.add(class_obj)
 
-    # Commit the changes for classes related to the current course
+# Use the app context to work within the application
+with app.app_context():
+    
+    # Initialize courses and classes in the database
+    for course_info in courses_data:
+        course_name = course_info["course_name"]
+        class_names = course_info["class_names"]
+        
+        # Create the course
+        course = Course(course_name=course_name)
+        db.session.add(course)
+        db.session.commit()  # Commit course to get the course ID
+        
+        # Create classes for the course
+        for class_name in class_names:
+            class_obj = Class(class_name=class_name, course=course)
+            db.session.add(class_obj)
+
+        # Commit the changes for classes related to the current course
+        db.session.commit()
+
+    # Commit the final changes to the database
     db.session.commit()
-
-# Commit the final changes to the database
-db.session.commit()
+                                                                                                                                                                                                             
+                                                                                                                                                                                                             
 print("Courses and classes initialized successfully.")
