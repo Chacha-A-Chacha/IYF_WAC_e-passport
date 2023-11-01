@@ -3,6 +3,7 @@
 {% block heading%}Registration Panel{% endblock %}
 
 
+
 {% block content %}
 <div class="space-y-6">
     <section class="max-w-4xl p-4 mb-6 bg-white border rounded-md shadow-md">
@@ -34,7 +35,7 @@
             <p class="mt-1 text-sm text-gray-500">Enter student details below.</p>
         </div>
     
-        <form action="{{ url_for('admin.admin_register_student') }}" method="POST">
+        <form action="{{ url_for('admin.admin_register') }}" method="POST">
             {{ student_form.hidden_tag() }}
             <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
                 <div>
@@ -102,7 +103,15 @@
                     {% endif %}
                 </div>
             </div>
-            
+            {% if student_form.errors %}
+            <ul>
+                {% for field, errors in student_form.errors.items() %}
+                {% for error in errors %}
+                <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+            {% endif %}
             <div class="mt-4 max-w-sm flex flex-end">
                 <button class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 
                         transform bg-blue-600 border rounded-lg hover:bg-blue-700" type="submit">
@@ -118,7 +127,7 @@
             <p class="mt-1 text-sm text-gray-500">Enter teacher details below.</p>
         </div>
     
-        <form action="{{ url_for('admin.admin_register_teacher') }}" method="POST">
+        <form action="{{ url_for('admin.admin_register') }}" method="POST">
             {{ teacher_form.hidden_tag() }}
             <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
                 <div>
@@ -150,7 +159,15 @@
                  focus:outline-none ", placeholder="Enter Class") }}
                 </div>
             </div>
-            
+            {% if teacher_form.errors %}
+            <ul>
+                {% for field, errors in teacher_form.errors.items() %}
+                {% for error in errors %}
+                <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+            {% endif %}
             <div class="mt-4 max-w-sm flex align-end">
                 <button class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 
                         transform bg-blue-600 border rounded-lg hover:bg-blue-700" type="submit">

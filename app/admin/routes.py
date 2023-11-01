@@ -91,6 +91,7 @@ def admin_register_student():
             course_name = form.course_name.data
             # role = Role.query.filter_by(role='Student').first()
             # additional_info = form.additional_info.data
+            
 
             # Register student
             student = Student(username=username, email=email, password=password, role='student')
@@ -191,14 +192,69 @@ def admin_register_teacher():
 #     mail.send(msg)
 
 
-@admin_bp.route('/register')
-def register():
+@admin_bp.route('/register', methods=['GET', 'POST'])
+def admin_register():
+    """
+    Handle the registration of a new student or teacher by the admin.
+    Display a registration form for the admin to input user details.
+    Register the user in the database and display flash messages for success or error.
+
+    Returns:
+        str: A redirect response to the admin dashboard or the registration form page based on form submission.
+    """
     student_form = StudentRegistrationForm()
     teacher_form = TeacherRegistrationForm()
-    # Retrieve registered students from the database (modify this query based on your actual model)
-    # students = Student.query.all()
-    return render_template('admin/register.html', teacher_form=teacher_form, student_form=student_form)
 
+    if student_form.validate_on_submit():
+        handle_registration(student_form, 'student')
+
+    if teacher_form.validate_on_submit():
+        handle_registration(teacher_form, 'teacher')
+
+    return render_template('admin/register.html', student_form=student_form, teacher_form=teacher_form)
+
+
+def handle_registration(form, role):
+    try:
+        username = form.username.data
+        email = form.email.data
+        password = generate_temp_password()
+        class_name = form.class_name.data
+        course_name = form.course_name.data
+
+        print("Form Data - Username:", form.username.data, "Email:", form.email.data)
+        print(form.validate_on_submit())  # Check if the form is validating correctly
+        print(form.errors)  # Print form validation errors  
+
+        if role == 'student':
+            user = Student(username=username, email=email, password=password, role=role)
+        else:
+            user = Teacher(username=username, email=email, password=password, role=role)
+        
+        db.session.add(user)
+        db.session.commit()
+
+        # Handle class and course relationships
+        class_obj = Class.query.filter_by(class_name=class_name).first()
+        course_obj = Course.query.filter_by(course_name=course_name).first()
+
+        if role == 'student':
+            user.class_enrollment = class_obj
+            user.course_enrollment = course_obj
+        else:
+            user.class_teacher = class_obj
+            user.course_teacher = course_obj
+
+        db.session.commit()
+
+        # Send temporary password email
+        send_temp_password_email(email, user.student_id if role == 'student' else user.teacher_id, password)
+
+        flash(f'{role.capitalize()} registered successfully!', 'success')
+    except Exception as e:
+        print(str(e))  # Log the exception for debugging
+        db.session.rollback()  # Rollback changes if there's an error
+        flash(f'Error registering {role}. Please try again.', 'error')
 
 
 @admin_bp.route('/teachers', methods=['GET'])

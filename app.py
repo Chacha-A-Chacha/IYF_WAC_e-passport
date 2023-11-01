@@ -11,9 +11,12 @@ app = create_app(env)
 # Initialize Flask-Migrate with the Flask app and the SQLAlchemy database instance
 migrate = Migrate(app, db)
 
+
+
 if __name__ == '__main__':
     # Run the Flask app
     app.run()
+
 
 """
 from app import create_app, db  # Import necessary modules from the app package
