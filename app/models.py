@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# from flask_login import  UserMixin
+from flask_login import  UserMixin
 from datetime import datetime  # Import the datetime module
 import random
 import string
@@ -17,7 +17,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """
         Represents a user in the system.
 

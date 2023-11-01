@@ -145,7 +145,7 @@ def admin_register_teacher():
             print(form.errors)  # Print form validation errors  
 
             # Register teacher
-            teacher = Teacher(username=username, email=email, password=password, role='teacher')
+            teacher = Teacher(username=username, email=email, password=password)
             db.session.add(teacher)
             db.session.commit()
 
@@ -158,16 +158,16 @@ def admin_register_teacher():
             db.session.commit()
 
             # Send temporary password email
-            send_temp_password_email(email, teacher.teacher_id, password)
+            # send_temp_password_email(email, teacher.teacher_id, password)
 
             flash('Teacher registered successfully!', 'success')
             
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
-            flash('Error registering teacher. Please try again.', 'error')
+            flash('Error registering teacher: {}. Please try again'.format(str(e)), 'error')
 
-    return redirect(url_for('admin.register'))
+    return render_template('admin/register_teacher.html', form=form)
 
 
 # Helper function to generate a student ID
@@ -208,7 +208,7 @@ def admin_register():
     if student_form.validate_on_submit():
         handle_registration(student_form, 'student')
 
-    if teacher_form.validate_on_submit():
+    else:
         handle_registration(teacher_form, 'teacher')
 
     return render_template('admin/register.html', student_form=student_form, teacher_form=teacher_form)
