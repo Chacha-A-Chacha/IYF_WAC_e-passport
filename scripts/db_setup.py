@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 """
-from app import app, db
-from app.models import Class, Course
+from ..app import create_app, db
+from ..app.models import Class, Course
 
+app = create_app()
 # Create an application context
 app.app_context().push()
 
