@@ -116,7 +116,7 @@ class Class(db.Model):
     attendances = db.relationship('Attendance', backref='class_attendance', lazy=True)  # One-to-many relationship with attendances
 
     # Specify the foreign key columns for the teacher relationship
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     # Specify the foreign key columns for the students relationship
     student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)

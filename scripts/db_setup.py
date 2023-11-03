@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-"""
+
 from ..app import create_app, db
 from ..app.models import Class, Course
 
-app = create_app()
+app = create_app("development")
 # Create an application context
 app.app_context().push()
+
 
 with app.app_context():
     # List of courses and their associated class names
