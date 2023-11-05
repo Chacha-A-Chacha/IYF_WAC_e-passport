@@ -90,7 +90,7 @@ class Course(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(120), unique=True, nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, default=0)
     classes = db.relationship('Class', backref='course', lazy=True)  # One-to-many relationship with classes
 
 
@@ -116,10 +116,10 @@ class Class(db.Model):
     attendances = db.relationship('Attendance', backref='class_attendance', lazy=True)  # One-to-many relationship with attendances
 
     # Specify the foreign key columns for the teacher relationship
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, default=0)
 
     # Specify the foreign key columns for the students relationship
-    student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True, default=0)
 
     # Define the relationships with User model using the foreign_keys argument
     teacher = db.relationship('User', foreign_keys=[teacher_id], backref='class_taught', lazy=True)

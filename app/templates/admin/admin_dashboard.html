@@ -14,6 +14,18 @@
     <p>Total Users: {{ admin_data.total_users }}</p>
     <p>Total Orders: {{ admin_data.total_orders }}</p>
     <p>New Requests: {{ admin_data.new_requests }}</p>
+
+    <h1 class="mt-4">Courses and Classes</h1>
+    <ul>
+        {% for course in courses %}
+        <li>{{ course.course_name }}</li>
+        <ul>
+            {% for class in course.classes %}
+            <li>{{ class.class_name }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </ul>
 </body>
 
 {% endblock %}

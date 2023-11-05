@@ -1,5 +1,5 @@
 #!/src/bin/env python3
-from flask import Flask, request, render_template, flash, redirect, url_for
+from flask import Flask, request, render_template, flash, redirect, url_for, jsonify
 from sqlalchemy.exc import IntegrityError
 import pandas as pd
 
@@ -14,6 +14,9 @@ def admin_dashboard():
     """
 
     """
+
+    courses = Course.query.all()  # Retrieve all courses from the database
+  
     # Logic to fetch admin-related data from the database or other sources
     admin_data = {
         'total_users': 1000,
@@ -21,7 +24,7 @@ def admin_dashboard():
         'new_requests': 10
     }
     # Render the admin dashboard template and pass the admin data to it
-    return render_template('admin/admin_dashboard.html', admin_data=admin_data)
+    return render_template('admin/admin_dashboard.html', admin_data=admin_data, courses=courses )
 
 
 # Route to submit the Excel sheet and register students
@@ -375,29 +378,52 @@ def initialize_courses_and_classes():
 
     # Initialize courses and classes in the database
     try:
-        default_teacher_id = 1
         for course_info in courses_data:
             course_name = course_info["course_name"]
             class_names = course_info["class_names"]
             
-            # Create the course
-            course = Course(course_name=course_name, teacher_id=default_teacher_id)
-            db.session.add(course)
-            db.session.commit()  # Commit course to get the course ID
+            # try:
+            #     new_course = Course(course_name=course_name)
+            #     db.session.add(new_course)
+            #     db.session.commit()
+            #     flash("Course created successfully") 
 
-            # Check if the course already exists
+            # except IntegrityError:
+            #     db.session.rollback()
+            #     existing_course = Course.query.filter_by(course_name=course_name).first()
+            #     flash(f"Course '{course_name}' already exists with ID: {existing_course.id}")
+
+           
             existing_course = Course.query.filter_by(course_name=course_name).first()
             
             if existing_course:
-                # Course with the same name already exists, you can update it or skip it
-                print(f"Course '{course_name}' already exists. Skipping...")
-                flash(f"Course '{course_name}' already exists. Skipping...")
 
-                continue            
-            
+                # Course with the same name already exists
+                if not existing_course.classes:
+                    # If the course has no classes, create classes for it
+                    for class_name in class_names:
+                        class_obj = Class(class_name=class_name, course=existing_course)
+                        db.session.add(class_obj)
+
+                    # Commit the changes for classes related to the current course
+                    db.session.commit()
+                    flash(f"Classes for '{course_name}' created successfully")
+
+                else:
+                    # Course with the same name already exists, you can update it or skip it
+                    flash(f"Course '{course_name}' already exists. Skipping...")
+
+                    continue       
+
+            # Create a new course
+            new_course = Course(course_name=course_name)
+            db.session.add(new_course)
+            db.session.commit()
+            flash(f"Course '{course_name}' created successfully")
+
             # Create classes for the course
             for class_name in class_names:
-                class_obj = Class(class_name=class_name, course=course)
+                class_obj = Class(class_name=class_name, course=new_course)
                 db.session.add(class_obj)
 
             # Commit the changes for classes related to the current course

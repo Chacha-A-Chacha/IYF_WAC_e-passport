@@ -36,8 +36,8 @@
                     <select name="course" id="course-dropdown" type="text" 
                         class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none">
                         <option value="">Select Course</option>
-                        {% for course in courses %}
-                        <option value="{{ course.id }}">{{ course.course_name }}</option>
+                        {% for course in form.course_name.choices %}
+                        <option value="{{ course[0] }}">{{ course[1] }}</option>
                         {% endfor %}
                     </select>
 
@@ -86,18 +86,19 @@
 
     courseDropdown.addEventListener('change', () => {
         const selectedCourseId = courseDropdown.value;
-        fetch(`/get_classes/${selectedCourseId}`)
+        fetch(`/admin/get_classes/${selectedCourseId}`)
             .then(response => response.json())
             .then(data => {
-                // Clear existing options
                 classDropdown.innerHTML = '<option value="">Select Class</option>';
-                // Add new options based on selected course
-                data.classes.forEach(cls => {
+                data.forEach(cls => {
                     const option = document.createElement('option');
-                    option.value = cls.id;
-                    option.textContent = cls.class_name;
+                    option.value = cls[0]; // Class ID
+                    option.textContent = cls[1]; // Class Name
                     classDropdown.appendChild(option);
                 });
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
     });
 </script>
