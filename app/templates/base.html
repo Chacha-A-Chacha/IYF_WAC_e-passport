@@ -58,7 +58,7 @@
                 <div x-data="{ isOpen: false }" class="mt-5 flex-1 h-0 overflow-y-auto">
                     <nav class="px-2 space-y-1">
                         <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-                        <a href="#"
+                        <a href="{{ url_for('admin.admin_dashboard') }}"
                             x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                             x-on:click="isOpen = !isOpen"
                             class="group flex items-center px-2 py-2 text-base font-medium rounded-md">
@@ -72,7 +72,7 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="#"
+                        <a href="{{ url_for('admin.display_students') }}"
                             x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                             x-on:click="isOpen = !isOpen"
                             class="group flex items-center px-2 py-2 text-base font-medium rounded-md">
@@ -84,10 +84,24 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
-                            Team
+                            Students
+                        </a>
+                        <a href="{{ url_for('admin.display_teachers') }}"
+                            x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
+                            x-on:click="isOpen = !isOpen"
+                            class="group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                            <!-- Heroicon name: outline/users -->
+                            <svg class="mr-4 flex-shrink-0 h-6 w-6"
+                                x-bind:class="{ 'text-gray-500': isOpen, 'text-gray-400 group-hover:text-gray-500': !isOpen }"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            Teachers
                         </a>
 
-                        <a href="#"
+                        <a href="{{ url_for('admin.admin_register_teacher') }}"
                             x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                             x-on:click="isOpen = !isOpen"
                             class="group flex items-center px-2 py-2 text-base font-medium rounded-md">
@@ -99,7 +113,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                             </svg>
-                            Projects
+                            Registration
                         </a>
 
                         <a href="#"
@@ -169,7 +183,7 @@
                     <div class="mt-5 flex-grow flex flex-col">
                         <nav class="flex-1 px-2 pb-4 space-y-1">
                             <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
-                            <a href="#"
+                            <a href="{{ url_for('admin.admin_dashboard') }}"
                                 x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                                 x-on:click="isOpen = !isOpen"
                                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md">
@@ -183,7 +197,7 @@
                                 </svg>
                                 Dashboard
                             </a>
-                            <a href="#"
+                            <a href="{{ url_for('admin.display_students') }}"
                                 x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                                 x-on:click="isOpen = !isOpen"
                                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md">
@@ -195,10 +209,24 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
-                                Team
+                                Students
+                            </a>
+                            <a href="{{ url_for('admin.display_teachers') }}"
+                                x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
+                                x-on:click="isOpen = !isOpen"
+                                class="group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+                                <!-- Heroicon name: outline/users -->
+                                <svg class="text-gray-500 mr-3 flex-shrink-0 h-6 w-6"
+                                    x-bind:class="{ 'text-gray-500': isOpen, 'text-gray-400 group-hover:text-gray-500': !isOpen }"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                                Teachers
                             </a>
 
-                            <a href="#"
+                            <a href="{{ url_for('admin.admin_register_teacher') }}"
                                 x-bind:class="{ 'bg-gray-100 text-gray-900': isOpen, 'text-gray-600 hover:bg-gray-50 hover:text-gray-900': !isOpen }"
                                 x-on:click="isOpen = !isOpen"
                                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md">
@@ -210,7 +238,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                                 </svg>
-                                Projects
+                                Registation
                             </a>
 
                             <a href="#"

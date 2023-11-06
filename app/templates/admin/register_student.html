@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block heading%}Student Registration Panel{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+    <section class="max-w-4xl p-6 mb-6 bg-white border rounded-md shadow-md">
+        <div class="">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Single Student Registation</h3>
+            <p class="mt-1 text-sm text-gray-500">Enter student details below.</p>
+        </div>
+
+        <form action="{{ url_for('admin.admin_register_student') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="grid grid-cols-1 gap-8 mt-4 sm:grid-cols-2">
+                <div>
+                    <label class="text-gray-700 " for="username">Full Name</label>
+                    {{ form.username(id="username", type="text", class="block w-full max-w-sm px-4 py-2 my-2
+                    text-gray-700
+                    bg-white border border-gray-200 rounded-md
+                    focus:border-blue-400
+                    focus:outline-none ", placeholder="Enter username") }}
+
+                    {% if form.username.errors %}
+                    <ul class="text-red-500 text-xs mt-1">
+                        {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="mt-2 text-gray-700" for="email">Email Address</label>
+                    {{ form.email(id="email", type="email", class="block w-full max-w-sm px-4 py-2 mt-2
+                    text-gray-700 bg-white
+                    border border-gray-200 rounded-md
+                    focus:border-blue-400
+                    focus:outline-none ", placeholder="Enter Email Address") }}
+
+                    {% if form.email.errors %}
+                    <ul class="text-red-500 text-xs mt-1">
+                        {% for error in form.email.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="text-gray-700 " for="course-dropdown">Select Course</label>
+                    <select name="course_name" id="course-dropdown" type="text" 
+                        class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none">
+                        <option value="">Select Course</option>
+                        {% for course in form.course_name.choices %}
+                        <option value="{{ course[0] }}">{{ course[1] }}</option>
+                        {% endfor %}
+                    </select>
+                    
+
+                    {% if form.course_name.errors %}
+                    <ul class="text-red-500 text-xs mt-1">
+                        {% for error in form.course_name.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="text-gray-700 " for="class-dropdown">Select Class</label>
+                    <select name="class_name" id="class-dropdown" type="text"
+                        class="block w-full max-w-sm px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:outline-none">
+                        <option value="">Select Class</option>
+                       
+                    </select>
+
+                    {% if form.class_name.errors %}
+                    <ul class="text-red-500 text-xs mt-1">
+                        {% for error in form.class_name.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {% if form.errors %}
+            <ul>
+                {% for field, errors in form.errors.items() %}
+                {% for error in errors %}
+                <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="mt-4 max-w-sm flex flex-end">
+                <button class="px-6 py-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 
+                        transform bg-blue-600 border rounded-lg hover:bg-blue-700" type="submit">
+                    Register Student
+                </button>
+            </div>
+        </form>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+    // JavaScript to handle dynamic dropdowns
+    const courseDropdown = document.getElementById('course-dropdown');
+    const classDropdown = document.getElementById('class-dropdown');
+
+    courseDropdown.addEventListener('change', () => {
+        const selectedCourseId = courseDropdown.value;
+        fetch(`/admin/get_classes/${selectedCourseId}`)
+            .then(response => response.json())
+            .then(data => {
+                classDropdown.innerHTML = '<option value="">Select Class</option>';
+                data.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = parseInt(cls[0], 10); // Class ID
+                    option.textContent = cls[1]; // Class Name
+                    classDropdown.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+{% endblock %}

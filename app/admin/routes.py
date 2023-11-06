@@ -86,6 +86,11 @@ def admin_register_student():
         str: A redirect response to the admin dashboard or the registration form page based on form submission.
     """
     form = StudentRegistrationForm()
+
+    # Populate course choices for the dropdown
+    form.course_name.choices = [(course.id, course.course_name) for course in Course.query.all()]
+    form.class_name.choices = []
+
     if form.validate_on_submit():
 
         try:
@@ -94,36 +99,27 @@ def admin_register_student():
             password = generate_temp_password()
             class_name = form.class_name.data
             course_name = form.course_name.data
-            # role = Role.query.filter_by(role='Student').first()
-            # additional_info = form.additional_info.data
-            
-
+                    
             # Register student
-            student = Student(username=username, email=email, password=password, role='student')
-            # Assuming Student model has additional_info field
-            # student.additional_info = additional_info
+            student = Student(username=username, email=email, password=password, class_id=class_id, course_id=course_id)
             db.session.add(student)
             db.session.commit()
 
-            # Handle class relationship
-            # Assuming Class model has appropriate relationships defined
-            class_obj = Class.query.filter_by(class_name=class_name).first()
-            course_obj = Course.query.filter_by(course_name=course_name).first()
-            student.class_enrollment = class_obj
-            student.course_enrollment = course_obj
-            db.session.commit()
-
             # Send temporary password email
-            send_temp_password_email(email, student.student_id, password)
+            # send_temp_password_email(email, student.student_id, password)
 
             flash('Student registered successfully!', 'success')
-            
+        except IntegrityError as e:
+            print(str(e))  # Log the exception for debugging
+            db.session.rollback()  # Rollback changes if there's an error
+            flash('Error registering student: User with the same username or email already exists.', 'error')
+
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
-            flash('Error registering student. Please try again.', 'error')
-
-    return redirect(url_for('admin.register'))
+            flash('Error registering student: {}. Please try again'.format(str(e)), 'error')
+            
+    return render_template('admin/register_student.html', form=form)
 
 
 @admin_bp.route('/register-teacher', methods=['GET', 'POST'])
@@ -138,42 +134,30 @@ def admin_register_teacher():
     """
     form = TeacherRegistrationForm()
 
-    # Populate course and class choices for the dropdowns
+    # Populate course choices for the dropdown
     form.course_name.choices = [(course.id, course.course_name) for course in Course.query.all()]
     form.class_name.choices = []
 
     if form.validate_on_submit():
-
-
         try:
             username = form.username.data
             email = form.email.data
             password = generate_temp_password()  # Generate temporary password
-            class_name = form.class_name.data
-            course_name = form.course_name.data
-
-            print("Form Data - Username:", form.username.data, "Email:", form.email.data)
-            print(form.validate_on_submit())  # Check if the form is validating correctly
-            print(form.errors)  # Print form validation errors  
+            course_id = form.course_name.data  # corrected variable name from course_name to course_id
+            class_id = form.class_name.data  # corrected variable name from class_name to class_id
 
             # Register teacher
             teacher = Teacher(username=username, email=email, password=password, class_id=class_id, course_id=course_id)
             db.session.add(teacher)
             db.session.commit()
 
-            # Handle class and course relationships
-            # Assuming Class and Course models have appropriate relationships defined
-            # class_obj = Class.query.filter_by(class_name=class_name).first()
-            # course_obj = Course.query.filter_by(course_name=course_name).first()
-            # teacher.class_teacher = class_obj
-            # teacher.course_teacher = course_obj
-            # db.session.commit()
-
-            # Send temporary password email
-            # send_temp_password_email(email, teacher.teacher_id, password)
-
             flash('Teacher registered successfully!', 'success')
-            
+
+        except IntegrityError as e:
+            print(str(e))  # Log the exception for debugging
+            db.session.rollback()  # Rollback changes if there's an error
+            flash('Error registering teacher: User with the same username or email already exists.', 'error')
+
         except Exception as e:
             print(str(e))  # Log the exception for debugging
             db.session.rollback()  # Rollback changes if there's an error
