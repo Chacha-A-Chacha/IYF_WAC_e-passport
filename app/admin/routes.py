@@ -86,10 +86,10 @@ def admin_register_student():
         str: A redirect response to the admin dashboard or the registration form page based on form submission.
     """
     form = StudentRegistrationForm()
-
+    classes = Class.query.all()
     # Populate course choices for the dropdown
     form.course_name.choices = [(course.id, course.course_name) for course in Course.query.all()]
-    form.class_name.choices = []
+    form.class_name.choices = [(cls.id, cls.class_name) for cls in classes]
 
     if form.validate_on_submit():
 
@@ -97,8 +97,9 @@ def admin_register_student():
             username = form.username.data
             email = form.email.data
             password = generate_temp_password()
-            class_name = form.class_name.data
-            course_name = form.course_name.data
+            course_id = form.course_name.data
+            class_id = form.class_name.data
+           
                     
             # Register student
             student = Student(username=username, email=email, password=password, class_id=class_id, course_id=course_id)

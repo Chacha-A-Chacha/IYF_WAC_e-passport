@@ -15,7 +15,7 @@ def main():
     return render_template("student_dashboard.html")
 
 
-@student_bp.route('/dashboard/<int:student_id>', methods=['GET'])
+@student_bp.route('/dashboard/<string:student_id>', methods=['GET'])
 def student_dashboard(student_id):
     # Fetch student information including QR code data and profile photo
     student = Student.query.get(student_id)
@@ -23,7 +23,7 @@ def student_dashboard(student_id):
     # If student not found, you might want to handle this scenario, e.g., redirect to an error page
 
     # Pass student information to the template
-    return render_template('students/dashboard.html', student=student)
+    return render_template('students/student_dashboard.html', student=student)
 
 @student_bp.route("/")
 def dashboard():

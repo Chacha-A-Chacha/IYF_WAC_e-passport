@@ -5,6 +5,7 @@ from flask import current_app  # Flask's way of referring to the current applica
 
 from app import mail
 
+
 def generate_temp_password(length=12):
     """
     Generate a temporary password with the specified length.
@@ -58,3 +59,31 @@ def send_temp_password_email(email, temp_password):
         # Handle exceptions raised during the email sending process
         # logger.error(f'Error sending temporary password email to {email}: {str(e)}')
         raise e
+
+
+
+
+
+
+
+from flask_login import login_required, current_user
+
+# Custom decorator for admin-only routes
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.role != 'admin':
+            flash("Unauthorized. Admins only!", "danger")
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Custom decorator for teacher-only routes
+def teacher_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.role != 'teacher':
+            flash("Unauthorized. Teachers only!", "danger")
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function

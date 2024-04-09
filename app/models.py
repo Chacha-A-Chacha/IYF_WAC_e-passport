@@ -17,6 +17,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# Define the association table for the many-to-many relationship between users and courses
+user_courses = db.Table('user_courses', db.metadata,
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+    db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
+    extend_existing=True  # Specify extend_existing=True to redefine options and columns on an existing Table object
+)
+
+
 class User(db.Model, UserMixin):
     """
         Represents a user in the system.
@@ -49,7 +57,7 @@ class User(db.Model, UserMixin):
     nationality = db.Column(db.String(100))
     phone_number = db.Column(db.String(20))
     role = db.Column(db.String(50), nullable=False)  # Role can be 'admin', 'teacher', 'student'
-    courses = db.relationship('Course', backref='teacher', lazy=True)  # One-to-many relationship with courses
+    courses = db.relationship('Course', secondary=user_courses, backref='users', lazy='dynamic')  # Many-to-many relationship with courses
 
     # For students, many-to-one relationship with classes
     class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=True)
@@ -124,37 +132,58 @@ class Class(db.Model):
     # Define the relationships with User model using the foreign_keys argument
     teacher = db.relationship('User', foreign_keys=[teacher_id], backref='class_taught', lazy=True)
     students = db.relationship('User', foreign_keys=[student_id], backref='class_enrollment', lazy=True)
+    
+
+# class UserCourse(db.Model):
+#     """
+#     Represents the association between users and courses in the system.
+
+#     Attributes:
+#         id (int): The unique identifier of the user-course association.
+#         user_id (int): The ID of the user associated with the course.
+#         course_id (int): The ID of the course associated with the user.
+
+#     Relationships:
+#         user (User): Many-to-one relationship with the User table representing the user associated with the course.
+#         course (Course): Many-to-one relationship with the Course table representing the course associated with the user.
+#     """
+
+#     __tablename__ = 'user_courses'
+
+#     id = db.Column(db.Integer, primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+#     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+
+#     # Define the relationships with User and Course models
+#     user = db.relationship('User', backref='user_courses', lazy=True)
+#     course = db.relationship('Course', backref='course_users', lazy=True)
+
+#     def __init__(self, user_id, course_id):
+#         """
+#         Initializes a new UserCourse object.
+
+#         Args:
+#             user_id (int): The ID of the user associated with the course.
+#             course_id (int): The ID of the course associated with the user.
+#         """
+#         self.user_id = user_id
+#         self.course_id = course_id
+
 
 class Teacher(User):
     """
+    
     Represents a teacher in the system.
 
     Attributes:
-        username (str): The username of the teacher.
-        email (str): The email address of the teacher.
-        password (str): The hashed password of the teacher.
         class_id (int): The ID of the class the teacher is handling.
         course_id (int): The ID of the course the teacher is teaching.
-
-    Relationships:
-        class_teacher (Class): One-to-one relationship with the Class table representing the class the teacher is handling.
-        course_teacher (Course): One-to-one relationship with the Course table representing the course the teacher is teaching.
+    
     """
 
     __tablename__ = 'teachers'
 
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-
-    # Specify the foreign key columns for the class_teacher relationship
-    class_teacher_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=False)
-
-    # Specify the foreign key columns for the course_teacher relationship
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
-
-    # Define the relationships with Class and Course models using the foreign_keys argument
-    class_teacher = db.relationship('Class', foreign_keys=[class_teacher_id], backref='teachers_in_class', lazy=True)
-    course_teacher = db.relationship('Course', foreign_keys=[course_id], backref='teachers_in_course', lazy=True)
-
 
     def __init__(self, username=None, email=None, password=None, class_id=None, course_id=None):
         """
@@ -213,13 +242,10 @@ class Student(User):
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     student_id = db.Column(db.String(20), unique=True, nullable=False)
     qr_code_image = db.Column(db.LargeBinary, nullable=True)  # Binary field to store QR code image data
-    student_class_id = db.Column(db.Integer, db.ForeignKey('classes.id'), nullable=True)
 
-    # Define the relationship with the Class model
-    class_ = db.relationship('Class', foreign_keys=[student_class_id])
-    
 
-    def __init__(self, name=None, email=None, school_logo_path=None, username=None, password=None):
+    def __init__(self, name=None, email=None, school_logo_path=None, username=None, password=None, class_id=None,
+                 course_id=None):
         """
         Initializes a new Teacher object.
 
@@ -236,6 +262,9 @@ class Student(User):
         self.student_id = self.generate_student_id()
         self.school_logo_path = school_logo_path
         self.generate_qr_code()
+        self.class_id = class_id
+        self.course_id = course_id
+
 
     def generate_student_id(self):
         """
